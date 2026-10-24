@@ -21,7 +21,14 @@ echo "Encoding video…"
   -q:v 3 media/cam.mjpeg
 # 44.1 kHz stereo: at 48 kHz mono Chrome delivers it choppy.
 echo "Encoding audio…"
-"$FF" -hide_banner -loglevel error -y -i "$VIDEO" -map 0:a:0 \
+if "$FF" -hide_banner -i "$VIDEO" 2>&1 | grep -q 'Audio:'; then
+  AUDIO=(-i "$VIDEO" -map 0:a:0)
+else
+  echo "No audio track, using silence."
+  DUR=$("$FF" -hide_banner -i "$VIDEO" 2>&1 | sed -n 's/.*Duration: \([0-9:.]*\).*/\1/p')
+  AUDIO=(-f lavfi -t "$DUR" -i anullsrc=r=44100:cl=stereo)
+fi
+"$FF" -hide_banner -loglevel error -y "${AUDIO[@]}" \
   -af "adelay=${MARGIN}s:all=1" -ac 2 -ar 44100 -c:a pcm_s16le media/mic.wav
 # Framing preview with Canva's circle.
 "$FF" -hide_banner -loglevel error -y -ss $((MARGIN + 10)) -i media/cam.mjpeg -frames:v 1 \
