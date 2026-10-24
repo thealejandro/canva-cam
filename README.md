@@ -64,6 +64,7 @@ Each fix was checked by recording what Chrome actually delivered (`MediaRecorder
 ## Notes
 
 - It should work on any site that uses the webcam through `getUserMedia` (Meet, Loom…), but it was only tested with Canva.
+- CI (GitHub Actions) checks the scripts and runs `prepare.sh` on Linux with synthetic videos, with and without audio, on every PR.
 - Only use videos of people who agreed to it.
 - Not affiliated with Canva.
 - Demo video by [ANTONI SHKRABA production on Pexels](https://www.pexels.com/video/woman-is-talking-while-looking-at-camera-8135207/).
