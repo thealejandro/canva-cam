@@ -35,4 +35,4 @@ fi
   -vf "format=rgb24,geq=r='r(X,Y)*if(lte(hypot(X-W/2,Y-H/2),W/2),1,0.25)':g='g(X,Y)*if(lte(hypot(X-W/2,Y-H/2),W/2),1,0.25)':b='b(X,Y)*if(lte(hypot(X-W/2,Y-H/2),W/2),1,0.25)'" \
   media/preview.png
 echo "Done. Check media/preview.png, then open record.command"
-open media/preview.png
+if [[ $OSTYPE == darwin* ]]; then open media/preview.png; fi
