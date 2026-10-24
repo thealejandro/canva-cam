@@ -1,10 +1,11 @@
 {
   "manifest_version": 3,
-  "name": "Micrófono sin procesado",
-  "version": "1",
+  "name": "Raw microphone",
+  "description": "Requests the microphone without echo cancellation, noise suppression or auto gain.",
+  "version": "1.0",
   "content_scripts": [{
     "matches": ["<all_urls>"],
-    "js": ["crudo.js"],
+    "js": ["raw.js"],
     "run_at": "document_start",
     "all_frames": true,
     "match_about_blank": true,

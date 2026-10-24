@@ -1,38 +1,70 @@
 # canva-cam
 
-Graba una presentación con **Canva → Presentar y grabar** usando un video ya grabado: el video sale en la burbuja de la cámara y su audio como micrófono. Tú solo pasas las diapositivas al ritmo del audio.
+**Record a Canva presentation with a pre-recorded video as your webcam and its audio as your mic. No OBS, no virtual camera drivers.**
 
-Funciona con Google Chrome en macOS, sin OBS ni cámaras virtuales. Usa los dispositivos falsos de Chrome, que leen la cámara y el micrófono desde archivos.
+[Español](README.es.md)
 
-## Uso
+Canva's **Present and record** only takes a live camera. If the speaker can't be there (or you want a clean take), canva-cam feeds Chrome a video file as the camera and its audio as the microphone. You just advance the slides while the recording plays.
 
-1. **Preparar el video** (una vez por video, tarda ~1 min):
+```mermaid
+flowchart LR
+  V[video.mov] -->|prepare.sh<br>ffmpeg| C[cam.mjpeg<br>square crop + lead-in]
+  V -->|prepare.sh<br>ffmpeg| M[mic.wav<br>44.1 kHz stereo]
+  C --> CH[Chrome<br>fake media devices]
+  M --> CH
+  X[raw-mic extension<br>no voice processing] --> CH
+  CH --> CA[Canva<br>Present and record]
+```
+
+## Requirements
+
+- macOS with Google Chrome
+- [ffmpeg](https://ffmpeg.org) (`brew install ffmpeg`, or a static build at `bin/ffmpeg`)
+
+## Usage
+
+1. **Prepare the video** (once per video, ~1 min):
 
    ```bash
-   ./preparar.sh ~/Downloads/video.mov
+   ./prepare.sh ~/Downloads/video.mov
    ```
 
-   Genera `media/cam.mjpeg` y `media/mic.wav` con 5 s de margen al inicio. Al terminar, abre `media/vista-previa.png` con el círculo de Canva. Si la cara no queda centrada, repite el comando con un número al final: los píxeles desde arriba donde empieza el recorte (por defecto 100).
+   It writes `media/cam.mjpeg` and `media/mic.wav` with a 5 s lead-in and opens `media/preview.png` showing Canva's circle. If the face isn't centered, pass the crop offset in pixels from the top (default 100):
 
    ```bash
-   ./preparar.sh ~/Downloads/video.mov 250
+   ./prepare.sh ~/Downloads/video.mov 250
    ```
 
-   Si no tienes ffmpeg, el script descarga uno en `bin/`.
+2. **Open Chrome:** double-click `record.command` (the first time, right-click → **Open**). It opens a separate Chrome instance with its own profile in `chrome-profile/`; your normal Chrome stays untouched.
 
-2. **Abrir Chrome:** doble clic en `grabar.command`. La primera vez macOS puede bloquearlo: clic derecho → **Abrir**. Se abre una ventana de Chrome con un perfil aparte (`perfil-chrome/`), sin tocar tu Chrome normal.
+3. **First time only, in that window:** go to `chrome://extensions`, turn on **Developer mode** → **Load unpacked** → pick the `raw-mic` folder. Then sign in to Canva.
 
-3. **Solo la primera vez, en esa ventana:**
-   - Ve a `chrome://extensions`, activa **Modo de desarrollador** → **Cargar descomprimida** → elige la carpeta `mic-crudo` de este proyecto.
-   - Inicia sesión en Canva.
+4. **Record:** open your design → **Present and record**, choose the `fake…` camera and microphone and **hit record right away**. The video starts when Canva opens the camera, not when recording starts; the 5 s lead-in covers Canva's 3 s countdown. Change it with `MARGIN=8 ./prepare.sh …`.
 
-4. **Grabar:** abre la presentación → **Presentar y grabar**. Elige la cámara y el micrófono `fake…` y **pulsa grabar enseguida**. El video empieza en cuanto Canva abre la cámara, no cuando empieza a grabar. Los 5 s de margen cubren la cuenta atrás de 3 s de Canva.
+5. **Retake:** the audio plays once. Quit that Chrome window (Cmd+Q) and open `record.command` again.
 
-5. **Si algo sale mal:** el audio suena una sola vez. Cierra esa ventana con Cmd+Q y vuelve a abrir `grabar.command`.
+## How it works (and the gotchas)
 
-## Por qué está hecho así
+Chrome has testing flags that replace the camera and microphone with files: `--use-fake-device-for-media-stream`, `--use-file-for-fake-video-capture` and `--use-file-for-fake-audio-capture`. Getting a usable recording out of them took a few fixes:
 
-- **`mic-crudo/`**: extensión que pide el micrófono sin cancelación de eco, supresión de ruido ni volumen automático. Con esos filtros, Chrome sube la voz unos 13 dB y suena distorsionada. Chrome 137+ ya no permite cargar extensiones por línea de comandos, por eso se carga a mano en el paso 3.
-- **Audio a 44.1 kHz estéreo**: a 48 kHz mono, Chrome lo entrega entrecortado.
-- **`--disable-features=AudioServiceSandbox`**: sin esto, Chrome no puede leer el WAV.
-- **Brave no sirve**: casi no lee el vídeo MJPEG (sale congelado), y con Y4M el vídeo va ~0.9 s detrás del audio.
+| Problem | Cause | Fix |
+|---|---|---|
+| No audio at all | The audio service sandbox can't read the WAV | `--disable-features=AudioServiceSandbox` (narrower than `--no-sandbox`) |
+| Choppy audio | Chrome's file reader stutters with 48 kHz mono | Encode the WAV as 44.1 kHz stereo |
+| Distorted, "over-suppressed" voice | Chrome's voice processing (auto gain +13 dB, noise suppression) is applied to the already clean recording | `raw-mic` extension forces `echoCancellation`, `noiseSuppression` and `autoGainControl` off on every `getUserMedia` call |
+| Extension can't be loaded by flag | Chrome 137+ ignores `--load-extension` | Load it once by hand; the profile remembers it |
+| Face off-center in Canva's bubble | Vertical phone video | Square crop with an adjustable offset + preview with the circle mask |
+
+Each fix was checked by recording what Chrome actually delivered (`MediaRecorder`) and comparing it with the source in ffmpeg: levels, spectrograms and frozen-frame detection.
+
+**Brave doesn't work well:** it barely decodes the MJPEG (the video freezes) and with Y4M the video lags ~0.9 s behind the audio.
+
+## Notes
+
+- It should work on any site that uses the webcam through `getUserMedia` (Meet, Loom…), but it was only tested with Canva.
+- Only use videos of people who agreed to it.
+- Not affiliated with Canva.
+
+## License
+
+[MIT](LICENSE)
