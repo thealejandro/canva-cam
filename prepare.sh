@@ -31,7 +31,7 @@ fi
 "$FF" -hide_banner -loglevel error -y "${AUDIO[@]}" \
   -af "adelay=${MARGIN}s:all=1" -ac 2 -ar 44100 -c:a pcm_s16le media/mic.wav
 # Framing preview with Canva's circle.
-"$FF" -hide_banner -loglevel error -y -ss $((MARGIN + 10)) -i media/cam.mjpeg -frames:v 1 \
+"$FF" -hide_banner -loglevel error -y -framerate 30 -i media/cam.mjpeg -ss $((MARGIN + 10)) -frames:v 1 \
   -vf "format=rgb24,geq=r='r(X,Y)*if(lte(hypot(X-W/2,Y-H/2),W/2),1,0.25)':g='g(X,Y)*if(lte(hypot(X-W/2,Y-H/2),W/2),1,0.25)':b='b(X,Y)*if(lte(hypot(X-W/2,Y-H/2),W/2),1,0.25)'" \
   media/preview.png
 echo "Done. Check media/preview.png, then open record.command"
