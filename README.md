@@ -4,6 +4,8 @@
 
 [Español](README.es.md)
 
+![Canva's Present and record with a pre-recorded video in the camera bubble](docs/demo.gif)
+
 Canva's **Present and record** only takes a live camera. If the speaker can't be there (or you want a clean take), canva-cam feeds Chrome a video file as the camera and its audio as the microphone. You just advance the slides while the recording plays.
 
 ```mermaid
@@ -64,6 +66,7 @@ Each fix was checked by recording what Chrome actually delivered (`MediaRecorder
 - It should work on any site that uses the webcam through `getUserMedia` (Meet, Loom…), but it was only tested with Canva.
 - Only use videos of people who agreed to it.
 - Not affiliated with Canva.
+- Demo video by [ANTONI SHKRABA production on Pexels](https://www.pexels.com/video/woman-is-talking-while-looking-at-camera-8135207/).
 
 ## License
 

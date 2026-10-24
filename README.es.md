@@ -4,6 +4,8 @@
 
 [English](README.md)
 
+![Presentar y grabar de Canva con un video pregrabado en la burbuja de la cámara](docs/demo.gif)
+
 **Presentar y grabar** de Canva solo acepta una cámara en vivo. Si quien presenta no puede estar (o quieres una toma limpia), canva-cam le pasa a Chrome un archivo de video como cámara y su audio como micrófono. Tú solo pasas las diapositivas mientras suena la grabación.
 
 ## Requisitos
@@ -44,6 +46,7 @@ Chrome tiene flags de prueba que sustituyen la cámara y el micrófono por archi
 - Debería funcionar en cualquier web que use la cámara con `getUserMedia` (Meet, Loom…), pero solo se probó con Canva.
 - Usa solo videos de personas que estén de acuerdo.
 - Sin relación con Canva.
+- Video de la demo: [ANTONI SHKRABA production en Pexels](https://www.pexels.com/video/woman-is-talking-while-looking-at-camera-8135207/).
 
 ## Licencia
 
