@@ -1,0 +1,4 @@
+#!/bin/sh
+# Fake Chrome: logs its arguments.
+[ "$1" = --version ] && { echo "Google Chrome 0.0 (fake)"; exit 0; }
+printf '%s\n' "$@" >> "$LOG"

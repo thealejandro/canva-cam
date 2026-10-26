@@ -59,3 +59,16 @@ jobs:
         run: |
           echo "not a video" > /tmp/bad.mp4
           if ./prepare.sh /tmp/bad.mp4; then echo "should have failed"; exit 1; fi
+
+      - name: record.command on Linux (fake Chrome)
+        run: |
+          set -eu
+          mkdir -p media && touch media/cam.mjpeg media/mic.wav
+          export LOG=$(mktemp)
+          PATH="$PWD/tests/stubs:$PATH" zsh record.command http://127.0.0.1/test
+          for _ in 1 2 3 4 5; do grep -q 127.0.0.1 "$LOG" && break; sleep 1; done
+          cat "$LOG"
+          grep -qx -- "--use-file-for-fake-video-capture=$PWD/media/cam.mjpeg" "$LOG"
+          grep -qx -- "--use-file-for-fake-audio-capture=$PWD/media/mic.wav%noloop" "$LOG"
+          grep -qx -- "--user-data-dir=$PWD/chrome-profile" "$LOG"
+          grep -qx http://127.0.0.1/test "$LOG"

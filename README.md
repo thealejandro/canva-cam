@@ -20,7 +20,7 @@ flowchart LR
 
 ## Requirements
 
-- macOS with Google Chrome
+- macOS with Google Chrome, or Linux with Google Chrome or Chromium (`./record.command` from a terminal). Windows: not yet (#2).
 - [ffmpeg](https://ffmpeg.org) (`brew install ffmpeg`, or a static build at `bin/ffmpeg`)
 
 ## Usage

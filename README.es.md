@@ -10,7 +10,7 @@
 
 ## Requisitos
 
-- macOS con Google Chrome
+- macOS con Google Chrome, o Linux con Google Chrome o Chromium (`./record.command` desde la terminal). Windows: todavía no (#2).
 - [ffmpeg](https://ffmpeg.org) (`brew install ffmpeg`, o un binario estático en `bin/ffmpeg`)
 
 ## Uso
