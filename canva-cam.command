@@ -14,7 +14,7 @@ ask() {  # ask "message" "Button 1" "Button 2" ... (the last one is the default)
 alert() { osascript -e "display alert \"canva-cam\" message \"$1\" as critical" >/dev/null }
 
 if ! command -v ffmpeg >/dev/null && [[ ! -x bin/ffmpeg ]]; then
-  alert "ffmpeg is missing. Install it with: brew install ffmpeg (or put a static build at bin/ffmpeg). Then double-click canva-cam again."
+  alert "ffmpeg is missing. Install it with: brew install ffmpeg, or put a static build at bin/ffmpeg (on Intel Macs Homebrew may compile it for a long time; evermeet.cx has a ready one). Then double-click canva-cam again."
   exit 1
 fi
 
