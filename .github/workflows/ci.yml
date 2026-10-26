@@ -11,6 +11,7 @@ permissions:
 jobs:
   prepare:
     runs-on: ubuntu-latest
+    timeout-minutes: 15  # default is 6 h; apt has hung here before
     steps:
       - uses: actions/checkout@v6
 
