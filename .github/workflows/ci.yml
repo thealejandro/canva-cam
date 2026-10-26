@@ -19,7 +19,10 @@ jobs:
 
       # ShellCheck does not support zsh, so syntax check only.
       - name: Syntax check
-        run: zsh -n prepare.sh && zsh -n record.command
+        run: for f in prepare.sh record.command canva-cam.command; do zsh -n "$f"; done
+
+      - name: Dialog flows (fake osascript)
+        run: bash tests/dialogs.sh
 
       - name: prepare.sh with and without audio, long and short
         run: |

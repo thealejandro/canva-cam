@@ -15,6 +15,8 @@
 
 ## Uso
 
+**Lo más fácil, sin terminal:** haz doble clic en `canva-cam.command` (la primera vez, clic derecho → **Abrir**). Te pide el video, te muestra el círculo de Canva para subir o bajar la cara, prepara los archivos y abre Chrome. Luego sigue en el paso 3. Los pasos de abajo hacen lo mismo desde la terminal.
+
 1. **Preparar el video** (una vez por video, ~1 min):
 
    ```bash
