@@ -46,6 +46,7 @@ Chrome tiene flags de prueba que sustituyen la cámara y el micrófono por archi
 ## Notas
 
 - Debería funcionar en cualquier web que use la cámara con `getUserMedia` (Meet, Loom…), pero solo se probó con Canva.
+- Última prueba: macOS 15.8.1 (Intel) con Chrome 155.0.8059.86. `record.command` muestra la versión de Chrome que abre; inclúyela al reportar un fallo.
 - Usa solo videos de personas que estén de acuerdo.
 - Sin relación con Canva.
 - Video de la demo: [ANTONI SHKRABA production en Pexels](https://www.pexels.com/video/woman-is-talking-while-looking-at-camera-8135207/).
