@@ -15,6 +15,8 @@
 
 ## Uso
 
+**Lo más fácil, sin terminal:** haz doble clic en `canva-cam.command` (la primera vez, clic derecho → **Abrir**). Te pide el video, te muestra el círculo de Canva para subir o bajar la cara, prepara los archivos y abre Chrome. Luego sigue en el paso 3. Los pasos de abajo hacen lo mismo desde la terminal.
+
 1. **Preparar el video** (una vez por video, ~1 min):
 
    ```bash
@@ -44,6 +46,7 @@ Chrome tiene flags de prueba que sustituyen la cámara y el micrófono por archi
 ## Notas
 
 - Debería funcionar en cualquier web que use la cámara con `getUserMedia` (Meet, Loom…), pero solo se probó con Canva.
+- Última prueba: macOS 15.8.1 (Intel) con Chrome 155.0.8059.86. `record.command` muestra la versión de Chrome que abre; inclúyela al reportar un fallo.
 - Usa solo videos de personas que estén de acuerdo.
 - Sin relación con Canva.
 - Video de la demo: [ANTONI SHKRABA production en Pexels](https://www.pexels.com/video/woman-is-talking-while-looking-at-camera-8135207/).

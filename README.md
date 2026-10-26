@@ -25,6 +25,8 @@ flowchart LR
 
 ## Usage
 
+**Easiest, no terminal:** double-click `canva-cam.command` (the first time, right-click → **Open**). It asks for the video, shows Canva's circle so you can move the face up or down, prepares the files and opens Chrome. Then continue at step 3. The steps below do the same from the terminal.
+
 1. **Prepare the video** (once per video, ~1 min):
 
    ```bash
@@ -64,6 +66,7 @@ Each fix was checked by recording what Chrome actually delivered (`MediaRecorder
 ## Notes
 
 - It should work on any site that uses the webcam through `getUserMedia` (Meet, Loom…), but it was only tested with Canva.
+- Last tested on macOS 15.8.1 (Intel) with Chrome 155.0.8059.86. `record.command` prints the Chrome version it launches; include it when reporting a problem.
 - CI (GitHub Actions) checks the scripts and runs `prepare.sh` on Linux with synthetic videos, with and without audio, on every PR.
 - Only use videos of people who agreed to it.
 - Not affiliated with Canva.
