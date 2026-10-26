@@ -25,6 +25,8 @@ flowchart LR
 
 ## Usage
 
+**Easiest, no terminal:** double-click `canva-cam.command` (the first time, right-click → **Open**). It asks for the video, shows Canva's circle so you can move the face up or down, prepares the files and opens Chrome. Then continue at step 3. The steps below do the same from the terminal.
+
 1. **Prepare the video** (once per video, ~1 min):
 
    ```bash

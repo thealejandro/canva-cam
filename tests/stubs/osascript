@@ -1,0 +1,6 @@
+#!/bin/sh
+# Fake osascript: logs each script and answers with the next line of $ANSWERS ("CANCEL" = user closed it).
+printf '%s\n' "$2" >> "$LOG"
+answer=$(head -n 1 "$ANSWERS"); sed -i '1d' "$ANSWERS"
+[ "$answer" = CANCEL ] && exit 1
+printf '%s\n' "$answer"
