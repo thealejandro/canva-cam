@@ -21,23 +21,38 @@ jobs:
       - name: Syntax check
         run: zsh -n prepare.sh && zsh -n record.command
 
-      - name: prepare.sh with and without audio
+      - name: prepare.sh with and without audio, long and short
         run: |
           set -eu
-          LEN=12     # long enough for the preview frame at MARGIN + 10 s
           MARGIN=5
           tmp=$(mktemp -d)
-          ffmpeg -hide_banner -loglevel error -f lavfi -i "testsrc=size=320x240:rate=30:duration=$LEN" \
-            -f lavfi -i "sine=frequency=440:duration=$LEN" -shortest "$tmp/with-audio.mp4"
-          ffmpeg -hide_banner -loglevel error -f lavfi -i "testsrc=size=320x240:rate=30:duration=$LEN" \
-            "$tmp/no-audio.mp4"
-          for v in with-audio no-audio; do
+          for len in 12 4; do  # 4 s: shorter than the 10 s preview frame (#9)
+            ffmpeg -hide_banner -loglevel error -f lavfi -i "testsrc=size=320x240:rate=30:duration=$len" \
+              -f lavfi -i "sine=frequency=440:duration=$len" -shortest "$tmp/audio-$len.mp4"
+            ffmpeg -hide_banner -loglevel error -f lavfi -i "testsrc=size=320x240:rate=30:duration=$len" \
+              "$tmp/silent-$len.mp4"
+          done
+          for v in audio-12 silent-12 audio-4 silent-4; do
             echo "::group::$v"
             rm -rf media
             ./prepare.sh "$tmp/$v.mp4"
             test -s media/cam.mjpeg && test -s media/preview.png
             dur=$(ffprobe -v error -show_entries format=duration -of csv=p=0 media/mic.wav)
-            echo "mic.wav: ${dur}s (expected $((LEN + MARGIN))s)"
-            awk -v d="$dur" -v e=$((LEN + MARGIN)) 'BEGIN { exit (d - e > 0.1 || e - d > 0.1) }'
+            expected=$((${v#*-} + MARGIN))
+            echo "mic.wav: ${dur}s (expected ${expected}s)"
+            awk -v d="$dur" -v e=$expected 'BEGIN { exit (d - e > 0.1 || e - d > 0.1) }'
             echo "::endgroup::"
           done
+
+      - name: Preview only
+        run: |
+          set -eu
+          rm -rf media
+          ffmpeg -hide_banner -loglevel error -f lavfi -i "testsrc=size=1080x1920:rate=30:duration=3" /tmp/v.mp4
+          PREVIEW_ONLY=1 ./prepare.sh /tmp/v.mp4 250
+          test -s media/preview.png && test ! -e media/cam.mjpeg
+
+      - name: Bad input fails
+        run: |
+          echo "not a video" > /tmp/bad.mp4
+          if ./prepare.sh /tmp/bad.mp4; then echo "should have failed"; exit 1; fi
