@@ -2,7 +2,7 @@
 # Turns a video into the fake camera (media/cam.mjpeg) and fake microphone (media/mic.wav).
 # Usage: ./prepare.sh video.mov [crop_y]
 #   crop_y: pixels from the top where the square crop starts (default 100).
-#   Raise it if the face sits too high in the circle, lower it if too low.
+#   Raise it if the face sits too low in the circle, lower it if too high.
 #   MARGIN=8 ./prepare.sh video.mov  changes the lead-in (default 5 s).
 #   PREVIEW_ONLY=1 ./prepare.sh video.mov 250  only writes media/preview.png (seconds, not minutes).
 #   NO_OPEN=1  doesn't open the preview (used by canva-cam.command).
